@@ -316,18 +316,15 @@ func generateHTML(days []Day, title string) {
     <div class="max-w-7xl mx-auto py-8 px-4">
         <h1 class="text-4xl font-bold text-center mb-12 text-gray-800">` + html.EscapeString(title) + `</h1>
 
-        <div class="flex justify-center flex-wrap gap-6 mb-8">
-            <div class="flex items-center gap-2">
-                <div class="w-4 h-4 bg-red-50 border-r-4 border-red-500 rounded"></div>
-                <span class="text-sm text-gray-600">❌ Mentiras</span>
+        <div class="flex justify-center flex-wrap gap-4 mb-8">
+            <div class="bg-red-50 border-r-4 border-red-500 rounded px-3 py-1">
+                <span class="text-sm text-gray-700">❌ Mentiras</span>
             </div>
-            <div class="flex items-center gap-2">
-                <div class="w-4 h-4 bg-yellow-50 border-r-4 border-red-500 rounded"></div>
-                <span class="text-sm text-gray-600">⁉️ Contradicciones</span>
+            <div class="bg-yellow-50 border-r-4 border-red-500 rounded px-3 py-1">
+                <span class="text-sm text-gray-700">⁉️ Contradicciones</span>
             </div>
-            <div class="flex items-center gap-2">
-                <div class="w-4 h-4 bg-green-100 border-l-4 border-green-500 rounded"></div>
-                <span class="text-sm text-gray-600">Hechos</span>
+            <div class="bg-green-100 border-l-4 border-green-500 rounded px-3 py-1">
+                <span class="text-sm text-gray-700">Hechos</span>
             </div>
         </div>
 

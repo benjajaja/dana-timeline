@@ -73,18 +73,15 @@
     <div class="max-w-7xl mx-auto py-8 px-4">
         <h1 class="text-4xl font-bold text-center mb-12 text-gray-800">Cronología de la DANA - Valencia 2024-2025</h1>
 
-        <div class="flex justify-center flex-wrap gap-6 mb-8">
-            <div class="flex items-center gap-2">
-                <div class="w-4 h-4 bg-red-50 border-r-4 border-red-500 rounded"></div>
-                <span class="text-sm text-gray-600">❌ Mentiras</span>
+        <div class="flex justify-center flex-wrap gap-4 mb-8">
+            <div class="bg-red-50 border-r-4 border-red-500 rounded px-3 py-1">
+                <span class="text-sm text-gray-700">❌ Mentiras</span>
             </div>
-            <div class="flex items-center gap-2">
-                <div class="w-4 h-4 bg-yellow-50 border-r-4 border-red-500 rounded"></div>
-                <span class="text-sm text-gray-600">⁉️ Contradicciones</span>
+            <div class="bg-yellow-50 border-r-4 border-red-500 rounded px-3 py-1">
+                <span class="text-sm text-gray-700">⁉️ Contradicciones</span>
             </div>
-            <div class="flex items-center gap-2">
-                <div class="w-4 h-4 bg-green-100 border-l-4 border-green-500 rounded"></div>
-                <span class="text-sm text-gray-600">Hechos</span>
+            <div class="bg-green-100 border-l-4 border-green-500 rounded px-3 py-1">
+                <span class="text-sm text-gray-700">Hechos</span>
             </div>
         </div>
 
@@ -191,7 +188,18 @@
                 <div class="day-dot"></div>
                 <div class="text-center py-4">
                     <span class="bg-blue-700 text-white px-4 py-2 rounded-full font-bold text-lg">2024-10-29</span>
-                    <div class="mt-2 text-blue-800 font-semibold">EL DÍA DE LA CATÁSTROFE</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-0">
+                </div>
+            </div>
+
+            <!-- Section: EL DÍA DE LA CATÁSTROFE -->
+            <div class="relative mb-8" id="el-día-de-la-catástrofe">
+                <div class="day-dot"></div>
+                <div class="text-center py-4">
+                    <span class="bg-gray-800 text-white px-4 py-2 rounded-full font-bold text-lg">EL DÍA DE LA CATÁSTROFE</span>
+                </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-0">
@@ -433,12 +441,18 @@
                             <p class="text-sm text-gray-600 mb-1">AEMET comunica a Emergencias de la Generalitat que las peores precipitaciones llegarán durante la tarde. <strong class="font-semibold">Mazón sigue comiendo</strong>.</p>
                         </div>
                     </div>
-                    <div class="event-left col-start-1" id="2024-10-29-1500-2">
+                    <div class="col-start-1"></div>
+                    <div class="event-right col-start-2" id="2024-10-29-1500-2">
+                        <div class="event-card event-card-left">
+                            <div class="text-sm text-gray-500 mb-1">2024-10-29 15:00</div>
+                            <div class="font-semibold text-gray-800 mb-2">🚨 Nivel 2 de Emergencia en Utiel-Requena</div>
+                            <p class="text-sm text-gray-600 mb-1">La Generalitat activa el nivel 2 de emergencia en la comarca de Utiel-Requena. Han pasado <strong class="font-semibold">7 horas y 30 minutos desde la alerta roja de AEMET</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="event-left col-start-1" id="2024-10-29-1500-3">
                         <div class="event-card event-card-both">
                             <div class="text-sm text-gray-500 mb-1">2024-10-29 15:00</div>
                             <div class="font-semibold text-gray-800 mb-2">❌ Bomberos forestales retirados - SIN EXPLICACIÓN</div>
-                            <p class="text-sm text-gray-600 mb-1">La Generalitat activa el nivel 2 de emergencia en la comarca de Utiel-Requena. Han pasado <strong class="font-semibold">7 horas y 30 minutos desde la alerta roja de AEMET</strong>.</p>
-                            <p class="text-sm text-gray-600 mb-1">## 2024-10-29 15:00 {#2024-10-29-1500-bomberos}</p>
                             <p class="text-sm text-gray-600 mb-1">Los bomberos forestales que vigilaban el caudal del barranco del Poyo y el río Magro son retirados. Una jefa de Emergencias declaró ante la jueza que <strong class="font-semibold">desconocía por qué se habían retirado</strong>.</p>
                             <p class="text-sm text-gray-600 mb-1">⁉️ <strong class="font-semibold">INEXPLICABLE</strong>: Se les ordenó vigilar a las 12:48 y se retiraron justo cuando la situación empeoraba. Ver: <a href="#2024-10-29-1248" class="text-blue-600 hover:text-blue-800 underline">2024-10-29 12:48</a></p>
                             <p class="text-sm text-gray-600 mb-1"><a href="https://elpais.com/espana/comunidad-valenciana/2025-06-17/una-jefa-de-emergencias-asegura-ante-la-jueza-que-no-sabe-porque-se-retiraron-los-bomberos-el-dia-de-la-dana.html" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener">Una jefa de Emergencias asegura ante la jueza que no sabe por qué se retiraron los bomberos - El País</a></p>
@@ -1428,6 +1442,35 @@
                             <p class="text-sm text-gray-600 mb-1">- Defiende la decisión de la Universidad de Valencia de suspender clases</p>
                             <p class="text-sm text-gray-600 mb-1">❌ <strong class="font-semibold">Mazón criticó a la UV por &#34;exagerada&#34;</strong>: La decisión que salvó vidas fue criticada por el president. Ver: <a href="#2024-10-29-1300" class="text-blue-600 hover:text-blue-800 underline">2024-10-29 13:00</a></p>
                             <p class="text-sm text-gray-600 mb-1"><a href="https://elpais.com/espana/comunidad-valenciana/2025-07-10/una-catedratica-defiende-ante-la-jueza-de-la-dana-que-la-generalitat-debio-enviar-la-alerta-a-la-poblacion-cinco-horas-antes.html" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener">Una catedrática defiende ante la jueza que la Generalitat debió enviar la alerta cinco horas antes - El País</a></p>
+                        </div>
+                    </div>
+                    <div class="col-start-2"></div>
+                </div>
+            </div>
+
+            <!-- Day: 2025-08-05 -->
+            <div class="relative mb-8" id="2025-08-05">
+                <div class="day-dot"></div>
+                <div class="text-center py-4">
+                    <span class="bg-blue-700 text-white px-4 py-2 rounded-full font-bold text-lg">2025-08-05</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-0">
+                    <div class="event-left col-start-1" id="2025-08-05-1000">
+                        <div class="event-card event-card-contradiction">
+                            <div class="text-sm text-gray-500 mb-1">2025-08-05 ~10:00</div>
+                            <div class="font-semibold text-gray-800 mb-2">⁉️ Consell aprueba medallas de oro para los escoltas de Mazón</div>
+                            <p class="text-sm text-gray-600 mb-1">El pleno del Consell aprueba 107 condecoraciones al mérito policial, incluyendo <strong class="font-semibold">medallas de oro</strong> para los escoltas que acompañaron a Mazón el día de la DANA. El presupuesto para las medallas es de 37.000€.</p>
+                            <p class="text-sm text-gray-600 mb-1">- <strong class="font-semibold">19 medallas de oro</strong>: incluyen a los escoltas del president</p>
+                            <p class="text-sm text-gray-600 mb-1">- <strong class="font-semibold">66 medallas de plata</strong>: para agentes que participaron en rescates</p>
+                            <p class="text-sm text-gray-600 mb-1">- <strong class="font-semibold">1 de bronce, 16 diplomas y 5 distinciones honoríficas</strong></p>
+                            <p class="text-sm text-gray-600 mb-1">⁉️ <strong class="font-semibold">CONTRADICCIÓN con El Ventorro</strong>: El dueño del restaurante declaró que Mazón llegó <strong class="font-semibold">&#34;solo y sin escoltas&#34;</strong>. Ver: <a href="#2024-10-29-1415-1430" class="text-blue-600 hover:text-blue-800 underline">2024-10-29 ~14:15-14:30</a></p>
+                            <p class="text-sm text-gray-600 mb-1">⁉️ <strong class="font-semibold">POLÉMICA</strong>: Policías de la Generalitat <strong class="font-semibold">rechazan públicamente</strong> las medallas por premiar a jefes y escoltas mientras los que hicieron rescates reciben distinciones menores.</p>
+                            <p class="text-sm text-gray-600 mb-1">⁉️ <strong class="font-semibold">&#34;PREMIO AL SILENCIO&#34;</strong>: La oposición interpreta las medallas como recompensa por no revelar qué hizo Mazón durante las horas críticas.</p>
+                            <p class="text-sm text-gray-600 mb-1">⁉️ <strong class="font-semibold">MÉRITOS OCULTOS</strong>: La jefa de la Policía de la Generalitat <strong class="font-semibold">no aclara los méritos específicos</strong> por los que se conceden las medallas de oro a los escoltas.</p>
+                            <p class="text-sm text-gray-600 mb-1"><a href="https://www.eldiario.es/comunitat-valenciana/generalitat-valenciana-aprueba-medallas-merito-policial-incluyen-escoltas-mazon-dana_1_12515208.html" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener">Generalitat aprueba medallas incluyendo escoltas - elDiario.es</a></p>
+                            <p class="text-sm text-gray-600 mb-1"><a href="https://www.eldiario.es/comunitat-valenciana/policias-generalitat-rechazan-medallas-mazon-dana-premian-jefes-escoltas_1_12613173.html" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener">Policías rechazan las medallas - elDiario.es</a></p>
+                            <p class="text-sm text-gray-600 mb-1"><a href="https://www.eldiario.es/comunitat-valenciana/jefa-policia-generalitat-oculta-meritos-escoltas-mazon-obtener-medallas-oro-gobierno-valenciano_1_12727638.html" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener">La jefa de Policía oculta los méritos - elDiario.es</a></p>
                         </div>
                     </div>
                     <div class="col-start-2"></div>
