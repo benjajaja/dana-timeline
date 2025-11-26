@@ -238,19 +238,19 @@ func generateHTML(days []Day, title string) {
         }
         .event-card-lie {
             background: #fef2f2;
-            border-left: 4px solid #ef4444;
+            border-right: 4px solid #ef4444;
         }
         .event-card-contradiction {
             background: #fefce8;
-            border-left: 4px solid #ef4444;
+            border-right: 4px solid #ef4444;
         }
         .event-card-both {
             background: linear-gradient(135deg, #fef2f2 50%, #fefce8 50%);
-            border-left: 4px solid #ef4444;
+            border-right: 4px solid #ef4444;
         }
         .event-card-left {
             background: #f0fdf4;
-            border-right: 4px solid #22c55e;
+            border-left: 4px solid #22c55e;
         }
     </style>
 </head>
@@ -260,16 +260,16 @@ func generateHTML(days []Day, title string) {
 
         <div class="flex justify-center flex-wrap gap-6 mb-8">
             <div class="flex items-center gap-2">
-                <div class="w-4 h-4 bg-green-100 border-r-4 border-green-500 rounded"></div>
-                <span class="text-sm text-gray-600">Hechos</span>
-            </div>
-            <div class="flex items-center gap-2">
-                <div class="w-4 h-4 bg-red-50 border-l-4 border-red-500 rounded"></div>
+                <div class="w-4 h-4 bg-red-50 border-r-4 border-red-500 rounded"></div>
                 <span class="text-sm text-gray-600">❌ Mentiras</span>
             </div>
             <div class="flex items-center gap-2">
-                <div class="w-4 h-4 bg-yellow-50 border-l-4 border-red-500 rounded"></div>
+                <div class="w-4 h-4 bg-yellow-50 border-r-4 border-red-500 rounded"></div>
                 <span class="text-sm text-gray-600">⁉️ Contradicciones</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-4 h-4 bg-green-100 border-l-4 border-green-500 rounded"></div>
+                <span class="text-sm text-gray-600">Hechos</span>
             </div>
         </div>
 
@@ -303,16 +303,16 @@ func generateHTML(days []Day, title string) {
 				} else if event.IsContradiction {
 					cardClass = "event-card-contradiction"
 				}
-				// Right side: empty left column, content in right column
-				fmt.Printf(`                    <div class="col-start-1"></div>
-                    <div class="event-right col-start-2" id="%s">
+				// Left side: lies/contradictions
+				fmt.Printf(`                    <div class="event-left col-start-1" id="%s">
                         <div class="event-card %s">
                             <div class="text-sm text-gray-500 mb-1">%s</div>
                             <div class="font-semibold text-gray-800 mb-2">%s</div>
 `, event.ID, cardClass, html.EscapeString(event.Time), html.EscapeString(event.Title))
 			} else {
-				// Left side: content in left column, empty right column
-				fmt.Printf(`                    <div class="event-left col-start-1" id="%s">
+				// Right side: facts
+				fmt.Printf(`                    <div class="col-start-1"></div>
+                    <div class="event-right col-start-2" id="%s">
                         <div class="event-card event-card-left">
                             <div class="text-sm text-gray-500 mb-1">%s</div>
                             <div class="font-semibold text-gray-800 mb-2">%s</div>
@@ -327,11 +327,11 @@ func generateHTML(days []Day, title string) {
 
 			if event.IsRight {
 				fmt.Println(`                        </div>
-                    </div>`)
-			} else {
-				fmt.Println(`                        </div>
                     </div>
                     <div class="col-start-2"></div>`)
+			} else {
+				fmt.Println(`                        </div>
+                    </div>`)
 			}
 		}
 
