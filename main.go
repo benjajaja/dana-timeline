@@ -10,13 +10,14 @@ import (
 )
 
 type Event struct {
-	Time          string
-	Title         string
-	Content       []string
-	IsRight       bool // true if contains ❌ or ⁉️
-	IsLie         bool // ❌ - proven lie
+	Time            string
+	Title           string
+	Content         []string
+	IsRight         bool // true if contains ❌ or ⁉️
+	IsLie           bool // ❌ - proven lie
 	IsContradiction bool // ⁉️ - contradiction
-	ID            string
+	IsDark          bool // between --- markers
+	ID              string
 }
 
 type Day struct {
@@ -49,6 +50,7 @@ func parseTimeline(filename string) ([]Day, string) {
 	var currentEvent *Event
 	var title string
 	idCounts := make(map[string]int) // Track ID occurrences for unique IDs
+	inDarkSection := false          // Track if we're between --- markers
 
 	scanner := bufio.NewScanner(file)
 	lineNum := 0
@@ -59,6 +61,12 @@ func parseTimeline(filename string) ([]Day, string) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		lineNum++
+
+		// Toggle dark section on --- markers
+		if line == "---" {
+			inDarkSection = !inDarkSection
+			continue
+		}
 
 		// Skip the main title
 		if lineNum == 1 && strings.HasPrefix(line, "# ") && !dayDateRe.MatchString(line) {
@@ -103,8 +111,9 @@ func parseTimeline(filename string) ([]Day, string) {
 				eventID = fmt.Sprintf("%s-%d", baseID, idCounts[baseID]-1)
 			}
 			currentEvent = &Event{
-				Time: strings.TrimSpace(matches[1]),
-				ID:   eventID,
+				Time:   strings.TrimSpace(matches[1]),
+				ID:     eventID,
+				IsDark: inDarkSection,
 			}
 			continue
 		}
@@ -162,6 +171,23 @@ func makeID(s string) string {
 func processContent(content string) string {
 	// Escape HTML
 	escaped := html.EscapeString(content)
+
+	// Process markdown images ![alt](url) - must be before links
+	imgRe := regexp.MustCompile(`!\[([^\]]*)\]\(([^)]+)\)`)
+	escaped = imgRe.ReplaceAllStringFunc(escaped, func(match string) string {
+		// Unescape for processing
+		match = strings.ReplaceAll(match, "&amp;", "&")
+		match = strings.ReplaceAll(match, "&lt;", "<")
+		match = strings.ReplaceAll(match, "&gt;", ">")
+
+		submatches := imgRe.FindStringSubmatch(match)
+		if len(submatches) == 3 {
+			alt := submatches[1]
+			url := submatches[2]
+			return fmt.Sprintf(`<img src="%s" alt="%s" class="max-w-full h-auto rounded my-2">`, url, html.EscapeString(alt))
+		}
+		return match
+	})
 
 	// Process markdown links [text](url)
 	linkRe := regexp.MustCompile(`\[([^\]]+)\]\(([^)]+)\)`)
@@ -252,6 +278,15 @@ func generateHTML(days []Day, title string) {
             background: #f0fdf4;
             border-left: 4px solid #22c55e;
         }
+        .dark-section {
+            background: rgba(0, 0, 0, 0.5);
+            margin-left: -1rem;
+            margin-right: -1rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -294,7 +329,23 @@ func generateHTML(days []Day, title string) {
 
                 <div class="grid grid-cols-2 gap-0">`)
 
-		for _, event := range day.Events {
+		inDarkOutput := false
+		for i, event := range day.Events {
+			// Handle dark section transitions
+			if event.IsDark && !inDarkOutput {
+				// Entering dark section - close grid, open dark wrapper, reopen grid
+				fmt.Println(`                </div>
+                <div class="dark-section">
+                <div class="grid grid-cols-2 gap-0">`)
+				inDarkOutput = true
+			} else if !event.IsDark && inDarkOutput {
+				// Exiting dark section - close grid, close dark wrapper, reopen grid
+				fmt.Println(`                </div>
+                </div>
+                <div class="grid grid-cols-2 gap-0">`)
+				inDarkOutput = false
+			}
+			_ = i // suppress unused warning
 			if event.IsRight {
 				// Determine card class based on lie/contradiction
 				cardClass := "event-card-lie"
@@ -335,8 +386,14 @@ func generateHTML(days []Day, title string) {
 			}
 		}
 
-		fmt.Println(`                </div>
-            </div>`)
+		// Close dark section if still open at end of day
+		if inDarkOutput {
+			fmt.Println(`                </div>
+                </div>`)
+		} else {
+			fmt.Println(`                </div>`)
+		}
+		fmt.Println(`            </div>`)
 	}
 
 	fmt.Println(`        </div>
