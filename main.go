@@ -52,7 +52,7 @@ func parseTimeline(filename string) ([]Day, string) {
 	var currentEvent *Event
 	var title string
 	idCounts := make(map[string]int) // Track ID occurrences for unique IDs
-	inDarkSection := false          // Track if we're between --- markers
+	inDarkSection := false           // Track if we're between --- markers
 
 	scanner := bufio.NewScanner(file)
 	lineNum := 0
@@ -116,7 +116,8 @@ func parseTimeline(filename string) ([]Day, string) {
 		}
 
 		// Day subtitle (like "## EL DÍA DE LA CATÁSTROFE")
-		if strings.HasPrefix(line, "## ") && !timeRe.MatchString(line) && currentDay != nil && currentEvent == nil {
+		if strings.HasPrefix(line, "## ") && !timeRe.MatchString(line) && currentDay != nil &&
+			currentEvent == nil {
 			currentDay.Subtitle = strings.TrimPrefix(line, "## ")
 			continue
 		}
@@ -207,7 +208,11 @@ func processContent(content string) string {
 		if len(submatches) == 3 {
 			alt := submatches[1]
 			url := submatches[2]
-			return fmt.Sprintf(`<img src="%s" alt="%s" class="max-w-full h-auto rounded my-2">`, url, html.EscapeString(alt))
+			return fmt.Sprintf(
+				`<img src="%s" alt="%s" class="max-w-full h-auto rounded my-2">`,
+				url,
+				html.EscapeString(alt),
+			)
 		}
 		return match
 	})
@@ -226,9 +231,17 @@ func processContent(content string) string {
 			url := submatches[2]
 			// Internal anchor links don't need target="_blank"
 			if strings.HasPrefix(url, "#") {
-				return fmt.Sprintf(`<a href="%s" class="text-blue-600 hover:text-blue-800 underline">%s</a>`, url, html.EscapeString(text))
+				return fmt.Sprintf(
+					`<a href="%s" class="text-blue-600 hover:text-blue-800 underline">%s</a>`,
+					url,
+					html.EscapeString(text),
+				)
 			}
-			return fmt.Sprintf(`<a href="%s" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener">%s</a>`, url, html.EscapeString(text))
+			return fmt.Sprintf(
+				`<a href="%s" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener">%s</a>`,
+				url,
+				html.EscapeString(text),
+			)
 		}
 		return match
 	})
@@ -257,18 +270,7 @@ func generateHTML(days []Day, title string) {
             background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
             top: 0;
             bottom: 0;
-        }
-        .day-dot {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 20px;
-            background: #1d4ed8;
-            border: 4px solid #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 0 2px #1d4ed8;
-            z-index: 10;
+			z-index: -1;
         }
         .event-left {
             padding-right: 2rem;
@@ -310,23 +312,41 @@ func generateHTML(days []Day, title string) {
             padding-top: 1rem;
             padding-bottom: 1rem;
         }
+        @media (max-width: 800px) {
+            .grid.grid-cols-2 {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .event-left {
+                max-width: 90%;
+                margin-right: auto;
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+            .event-right {
+                max-width: 90%;
+                margin-left: auto;
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div class="max-w-7xl mx-auto py-8 px-4">
         <h1 class="text-4xl font-bold text-center mb-12 text-gray-800">` + html.EscapeString(title) + `</h1>
 
-        <div class="flex justify-center flex-wrap gap-4 mb-8">
-            <div class="bg-red-50 border-r-4 border-red-500 rounded px-3 py-1">
-                <span class="text-sm text-gray-700">❌ Mentiras</span>
+        <!--<div class="flex justify-center flex-wrap gap-1 mb-8">
+            <div class="bg-red-50 border-r-4 border-red-500 rounded p-1">
+                <span class="text-xs text-gray-700">❌ Mentiras</span>
             </div>
-            <div class="bg-yellow-50 border-r-4 border-red-500 rounded px-3 py-1">
-                <span class="text-sm text-gray-700">⁉️ Contradicciones</span>
+            <div class="bg-yellow-50 border-r-4 border-red-500 rounded p-1">
+                <span class="text-xs text-gray-700">⁉️ Contradicciones</span>
             </div>
-            <div class="bg-green-100 border-l-4 border-green-500 rounded px-3 py-1">
-                <span class="text-sm text-gray-700">Hechos</span>
+            <div class="bg-green-100 border-l-4 border-green-500 rounded p-1">
+                <span class="text-xs text-gray-700">Hechos</span>
             </div>
-        </div>
+        </div>-->
 
         <div class="relative">
             <div class="timeline-line"></div>`)
@@ -337,18 +357,15 @@ func generateHTML(days []Day, title string) {
 			fmt.Printf(`
             <!-- Section: %s -->
             <div class="relative mb-8" id="%s">
-                <div class="day-dot"></div>
-                <div class="text-center py-4">
-                    <span class="bg-gray-800 text-white px-4 py-2 rounded-full font-bold text-lg">%s</span>
-                </div>
+                <div class="text-center my-4">
+                    <span class="bg-gray-800 text-white px-2 py-2 rounded-full font-bold text-lg">%s</span>
 `, html.EscapeString(day.SectionTitle), day.ID, html.EscapeString(day.SectionTitle))
 		} else {
 			// Regular day header
 			fmt.Printf(`
             <!-- Day: %s -->
             <div class="relative mb-8" id="%s">
-                <div class="day-dot"></div>
-                <div class="text-center py-4">
+                <div class="text-center my-4">
                     <span class="bg-blue-700 text-white px-4 py-2 rounded-full font-bold text-lg">%s</span>
 `, html.EscapeString(day.Date), day.ID, html.EscapeString(day.Date))
 
