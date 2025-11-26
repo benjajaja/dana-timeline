@@ -21,10 +21,12 @@ type Event struct {
 }
 
 type Day struct {
-	Date       string
-	Subtitle   string
-	Events     []Event
-	ID         string
+	Date         string
+	Subtitle     string
+	SectionTitle string // For non-date # headers like "Las horas desaparecidas"
+	Events       []Event
+	ID           string
+	IsDark       bool
 }
 
 func main() {
@@ -74,7 +76,7 @@ func parseTimeline(filename string) ([]Day, string) {
 			continue
 		}
 
-		// Day header
+		// Day header (date format)
 		if matches := dayDateRe.FindStringSubmatch(line); matches != nil {
 			// Save current event if any
 			if currentEvent != nil && currentDay != nil {
@@ -86,8 +88,29 @@ func parseTimeline(filename string) ([]Day, string) {
 				days = append(days, *currentDay)
 			}
 			currentDay = &Day{
-				Date: matches[1],
-				ID:   makeID(matches[1]),
+				Date:   matches[1],
+				ID:     makeID(matches[1]),
+				IsDark: inDarkSection,
+			}
+			continue
+		}
+
+		// Section header (non-date # header like "# Las horas desaparecidas")
+		if strings.HasPrefix(line, "# ") && !dayDateRe.MatchString(line) && lineNum > 1 {
+			// Save current event if any
+			if currentEvent != nil && currentDay != nil {
+				currentDay.Events = append(currentDay.Events, *currentEvent)
+				currentEvent = nil
+			}
+			// Save current day if any
+			if currentDay != nil {
+				days = append(days, *currentDay)
+			}
+			sectionTitle := strings.TrimPrefix(line, "# ")
+			currentDay = &Day{
+				SectionTitle: sectionTitle,
+				ID:           makeID(sectionTitle),
+				IsDark:       inDarkSection,
 			}
 			continue
 		}
@@ -312,7 +335,19 @@ func generateHTML(days []Day, title string) {
             <div class="timeline-line"></div>`)
 
 	for _, day := range days {
-		fmt.Printf(`
+		if day.SectionTitle != "" {
+			// Section header (non-date, like "Las horas desaparecidas")
+			fmt.Printf(`
+            <!-- Section: %s -->
+            <div class="relative mb-8" id="%s">
+                <div class="day-dot"></div>
+                <div class="text-center py-4">
+                    <span class="bg-gray-800 text-white px-4 py-2 rounded-full font-bold text-lg">%s</span>
+                </div>
+`, html.EscapeString(day.SectionTitle), day.ID, html.EscapeString(day.SectionTitle))
+		} else {
+			// Regular day header
+			fmt.Printf(`
             <!-- Day: %s -->
             <div class="relative mb-8" id="%s">
                 <div class="day-dot"></div>
@@ -320,9 +355,10 @@ func generateHTML(days []Day, title string) {
                     <span class="bg-blue-700 text-white px-4 py-2 rounded-full font-bold text-lg">%s</span>
 `, html.EscapeString(day.Date), day.ID, html.EscapeString(day.Date))
 
-		if day.Subtitle != "" {
-			fmt.Printf(`                    <div class="mt-2 text-blue-800 font-semibold">%s</div>
+			if day.Subtitle != "" {
+				fmt.Printf(`                    <div class="mt-2 text-blue-800 font-semibold">%s</div>
 `, html.EscapeString(day.Subtitle))
+			}
 		}
 
 		fmt.Println(`                </div>
