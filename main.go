@@ -208,6 +208,14 @@ func processContent(content string) string {
 		if len(submatches) == 3 {
 			alt := submatches[1]
 			url := submatches[2]
+			// Check if it's an mp4 file - render as video player
+			if strings.HasSuffix(strings.ToLower(url), ".mp4") {
+				return fmt.Sprintf(
+					`<video controls class="max-w-full h-auto rounded my-2"><source src="%s" type="video/mp4">%s</video>`,
+					url,
+					html.EscapeString(alt),
+				)
+			}
 			return fmt.Sprintf(
 				`<img src="%s" alt="%s" class="max-w-full h-auto rounded my-2">`,
 				url,
@@ -249,6 +257,17 @@ func processContent(content string) string {
 	// Process bold **text**
 	boldRe := regexp.MustCompile(`\*\*([^*]+)\*\*`)
 	escaped = boldRe.ReplaceAllString(escaped, `<strong class="font-semibold">$1</strong>`)
+
+	// Process blockquotes (lines starting with >)
+	// After HTML escaping, > becomes &gt;
+	if strings.HasPrefix(escaped, "&gt;") {
+		inner := strings.TrimPrefix(escaped, "&gt;")
+		inner = strings.TrimPrefix(inner, " ") // optional space after >
+		escaped = fmt.Sprintf(
+			`<blockquote class="border-l-4 border-gray-300 pl-3 ml-2 text-gray-600">%s</blockquote>`,
+			inner,
+		)
+	}
 
 	return escaped
 }
