@@ -293,7 +293,7 @@ func generateHTML(days []Day, title string) {
         }
         .event-left {
             padding-right: 2rem;
-            text-align: right;
+            text-align: left;
         }
         .event-right {
             padding-left: 2rem;
