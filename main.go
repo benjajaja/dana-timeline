@@ -289,22 +289,84 @@ func generateHTML(days []Day, title string) {
             background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
             top: 0;
             bottom: 0;
-			z-index: -1;
+            z-index: 0;
         }
-        .event-left {
-            padding-right: 2rem;
-            text-align: left;
+        .events-container {
+            display: flex;
+            position: relative;
         }
-        .event-right {
-            padding-left: 2rem;
-            text-align: left;
+        .events-col-left {
+            width: calc(50% - 50px);
+            padding-right: 0;
+        }
+        .events-col-center {
+            width: 100px;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .events-col-right {
+            width: calc(50% - 50px);
+            padding-left: 0;
+        }
+        .event-wrapper {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        .event-wrapper-left {
+            padding-right: 1rem;
+        }
+        .event-wrapper-right {
+            padding-left: 1rem;
+        }
+        .timestamp {
+            position: absolute;
+            background: white;
+            border: 2px solid #3b82f6;
+            border-radius: 0.5rem;
+            padding: 0 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1d4ed8;
+            text-align: center;
+            white-space: nowrap;
+            top: 0.75rem;
+        }
+        .timestamp::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            height: 2px;
+            background: #3b82f6;
+            z-index: -100;
+        }
+        .timestamp-left {
+            right: -50px;
+            transform: translateX(50%);
+        }
+        .timestamp-left::before {
+            right: 100%;
+            width: 200px;
+        }
+        .timestamp-right {
+            left: -50px;
+            transform: translateX(-50%);
+        }
+        .timestamp-right::before {
+            left: 100%;
+            width: 200px;
+        }
+        .timestamp-dark {
+            background: #1e293b;
+            border-color: #64748b;
+            color: #e2e8f0;
         }
         .event-card {
             background: white;
             border-radius: 0.5rem;
             padding: 1rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
         }
         .event-card-lie {
             background: #fef2f2;
@@ -332,21 +394,35 @@ func generateHTML(days []Day, title string) {
             padding-bottom: 1rem;
         }
         @media (max-width: 800px) {
-            .grid.grid-cols-2 {
-                display: flex;
-                flex-wrap: wrap;
+            .events-container {
+                flex-direction: column;
             }
-            .event-left {
-                max-width: 90%;
-                margin-right: auto;
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
+            .events-col-left, .events-col-right {
+                width: 100%;
             }
-            .event-right {
-                max-width: 90%;
-                margin-left: auto;
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
+            .events-col-center {
+                display: none;
+            }
+            .event-wrapper-left, .event-wrapper-right {
+                padding: 0;
+            }
+            .timestamp {
+                position: relative;
+                top: 0;
+                left: 0;
+                right: auto;
+                transform: none;
+                margin-bottom: 0.5rem;
+                display: inline-block;
+            }
+            .timestamp::before {
+                display: none;
+            }
+            .timeline-line {
+                display: none;
+            }
+            .text-center.my-4 {
+                text-align: left;
             }
         }
     </style>
@@ -395,73 +471,120 @@ func generateHTML(days []Day, title string) {
 		}
 
 		fmt.Println(`                </div>
+                <div class="events-container">
+                    <div class="events-col-left">`)
 
-                <div class="grid grid-cols-2 gap-0">`)
-
+		// Output left column (lies/contradictions)
 		inDarkOutput := false
-		for i, event := range day.Events {
-			// Handle dark section transitions
+		for _, event := range day.Events {
+			if !event.IsRight {
+				continue
+			}
 			if event.IsDark && !inDarkOutput {
-				// Entering dark section - close grid, open dark wrapper, reopen grid
-				fmt.Println(`                </div>
-                <div class="dark-section">
-                <div class="grid grid-cols-2 gap-0">`)
+				fmt.Println(`                        <div class="dark-section">`)
 				inDarkOutput = true
 			} else if !event.IsDark && inDarkOutput {
-				// Exiting dark section - close grid, close dark wrapper, reopen grid
-				fmt.Println(`                </div>
-                </div>
-                <div class="grid grid-cols-2 gap-0">`)
+				fmt.Println(`                        </div>`)
 				inDarkOutput = false
 			}
-			_ = i // suppress unused warning
-			if event.IsRight {
-				// Determine card class based on lie/contradiction
-				cardClass := "event-card-lie"
-				if event.IsLie && event.IsContradiction {
-					cardClass = "event-card-both"
-				} else if event.IsContradiction {
-					cardClass = "event-card-contradiction"
-				}
-				// Left side: lies/contradictions
-				fmt.Printf(`                    <div class="event-left col-start-1" id="%s">
-                        <div class="event-card %s">
-                            <div class="text-sm text-gray-500 mb-1">%s</div>
-                            <div class="font-semibold text-gray-800 mb-2">%s</div>
-`, event.ID, cardClass, html.EscapeString(event.Time), html.EscapeString(event.Title))
-			} else {
-				// Right side: facts
-				fmt.Printf(`                    <div class="col-start-1"></div>
-                    <div class="event-right col-start-2" id="%s">
-                        <div class="event-card event-card-left">
-                            <div class="text-sm text-gray-500 mb-1">%s</div>
-                            <div class="font-semibold text-gray-800 mb-2">%s</div>
-`, event.ID, html.EscapeString(event.Time), html.EscapeString(event.Title))
+
+			timePart := event.Time
+			if len(event.Time) > 10 {
+				timePart = strings.TrimSpace(event.Time[10:])
+			}
+			darkClass := ""
+			if event.IsDark {
+				darkClass = " timestamp-dark"
 			}
 
+			cardClass := "event-card-lie"
+			if event.IsLie && event.IsContradiction {
+				cardClass = "event-card-both"
+			} else if event.IsContradiction {
+				cardClass = "event-card-contradiction"
+			}
+			fmt.Printf(
+				`                        <div class="event-wrapper event-wrapper-left" id="%s">
+                            <div class="timestamp timestamp-left%s">%s</div>
+                            <div class="event-card %s">
+                                <div class="font-semibold text-gray-800 mb-2">%s</div>
+`,
+				event.ID,
+				darkClass,
+				html.EscapeString(timePart),
+				cardClass,
+				html.EscapeString(event.Title),
+			)
 			for _, line := range event.Content {
 				processed := processContent(line)
-				fmt.Printf(`                            <p class="text-sm text-gray-600 mb-1">%s</p>
-`, processed)
+				fmt.Printf(
+					`                                <p class="text-sm text-gray-600 mb-1">%s</p>
+`,
+					processed,
+				)
 			}
-
-			if event.IsRight {
-				fmt.Println(`                        </div>
-                    </div>
-                    <div class="col-start-2"></div>`)
-			} else {
-				fmt.Println(`                        </div>
-                    </div>`)
-			}
+			fmt.Println(`                            </div>
+                        </div>`)
 		}
-
-		// Close dark section if still open at end of day
 		if inDarkOutput {
-			fmt.Println(`                </div>
-                </div>`)
-		} else {
-			fmt.Println(`                </div>`)
+			fmt.Println(`                        </div>`)
 		}
+
+		fmt.Println(`                    </div>
+                    <div class="events-col-center"></div>
+                    <div class="events-col-right">`)
+
+		// Output right column (facts)
+		inDarkOutput = false
+		for _, event := range day.Events {
+			if event.IsRight {
+				continue
+			}
+			if event.IsDark && !inDarkOutput {
+				fmt.Println(`                        <div class="dark-section">`)
+				inDarkOutput = true
+			} else if !event.IsDark && inDarkOutput {
+				fmt.Println(`                        </div>`)
+				inDarkOutput = false
+			}
+
+			timePart := event.Time
+			if len(event.Time) > 10 {
+				timePart = strings.TrimSpace(event.Time[10:])
+			}
+			darkClass := ""
+			if event.IsDark {
+				darkClass = " timestamp-dark"
+			}
+
+			fmt.Printf(
+				`                        <div class="event-wrapper event-wrapper-right" id="%s">
+                            <div class="timestamp timestamp-right%s">%s</div>
+                            <div class="event-card event-card-left">
+                                <div class="font-semibold text-gray-800 mb-2">%s</div>
+`,
+				event.ID,
+				darkClass,
+				html.EscapeString(timePart),
+				html.EscapeString(event.Title),
+			)
+			for _, line := range event.Content {
+				processed := processContent(line)
+				fmt.Printf(
+					`                                <p class="text-sm text-gray-600 mb-1">%s</p>
+`,
+					processed,
+				)
+			}
+			fmt.Println(`                            </div>
+                        </div>`)
+		}
+		if inDarkOutput {
+			fmt.Println(`                        </div>`)
+		}
+
+		fmt.Println(`                    </div>
+                </div>`)
 		fmt.Println(`            </div>`)
 	}
 
