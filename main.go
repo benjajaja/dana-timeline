@@ -292,34 +292,30 @@ func generateHTML(days []Day, title string) {
             z-index: 0;
         }
         .events-container {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 100px 1fr;
+            grid-auto-rows: minmax(2rem, auto);
             position: relative;
         }
-        .events-col-left {
-            width: calc(50% - 50px);
-            padding-right: 0;
-        }
-        .events-col-center {
-            width: 100px;
-            position: relative;
-            flex-shrink: 0;
-        }
-        .events-col-right {
-            width: calc(50% - 50px);
-            padding-left: 0;
-        }
-        .event-wrapper {
-            position: relative;
-            margin-bottom: 1rem;
-        }
-        .event-wrapper-left {
+        .event-cell-left {
+            grid-column: 1;
             padding-right: 1rem;
         }
-        .event-wrapper-right {
+        .event-cell-center {
+            grid-column: 2;
+            display: flex;
+            justify-content: center;
+        }
+        .event-cell-right {
+            grid-column: 3;
             padding-left: 1rem;
         }
+        .event-card {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 1rem;
+        }
         .timestamp {
-            position: absolute;
             background: white;
             border: 2px solid #3b82f6;
             border-radius: 0.5rem;
@@ -329,7 +325,8 @@ func generateHTML(days []Day, title string) {
             color: #1d4ed8;
             text-align: center;
             white-space: nowrap;
-            top: 0.75rem;
+            height: fit-content;
+            position: relative;
         }
         .timestamp::before {
             content: '';
@@ -337,23 +334,14 @@ func generateHTML(days []Day, title string) {
             top: 50%;
             height: 2px;
             background: #3b82f6;
-            z-index: -100;
-        }
-        .timestamp-left {
-            right: -50px;
-            transform: translateX(50%);
+            z-index: -1;
+            width: 100px;
         }
         .timestamp-left::before {
             right: 100%;
-            width: 200px;
-        }
-        .timestamp-right {
-            left: -50px;
-            transform: translateX(-50%);
         }
         .timestamp-right::before {
             left: 100%;
-            width: 200px;
         }
         .timestamp-dark {
             background: #1e293b;
@@ -365,7 +353,6 @@ func generateHTML(days []Day, title string) {
             border-radius: 0.5rem;
             padding: 1rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            position: relative;
             z-index: 1;
         }
         .event-card-lie {
@@ -395,25 +382,15 @@ func generateHTML(days []Day, title string) {
         }
         @media (max-width: 800px) {
             .events-container {
+                display: flex;
                 flex-direction: column;
             }
-            .events-col-left, .events-col-right {
-                width: 100%;
-            }
-            .events-col-center {
-                display: none;
-            }
-            .event-wrapper-left, .event-wrapper-right {
+            .event-cell-left, .event-cell-right, .event-cell-center {
                 padding: 0;
             }
-            .timestamp {
-                position: relative;
-                top: 0;
-                left: 0;
-                right: auto;
-                transform: none;
+            .event-cell-center {
+                justify-content: flex-start;
                 margin-bottom: 0.5rem;
-                display: inline-block;
             }
             .timestamp::before {
                 display: none;
@@ -471,120 +448,104 @@ func generateHTML(days []Day, title string) {
 		}
 
 		fmt.Println(`                </div>
-                <div class="events-container">
-                    <div class="events-col-left">`)
+                <div class="events-container">`)
 
-		// Output left column (facts)
-		inDarkOutput := false
+		// Track row positions: each side independently, plus center for timestamps
+		leftRow := 1   // next available row for left cards
+		rightRow := 1  // next available row for right cards
+		centerRow := 1 // next available row for timestamps (no overlap)
+
 		for _, event := range day.Events {
+			timePart := event.Time
+			if len(event.Time) > 10 {
+				timePart = strings.TrimSpace(event.Time[10:])
+			}
+			darkClass := ""
+			if event.IsDark {
+				darkClass = " timestamp-dark"
+			}
+
+			// Estimate rows needed: 1 for title + 1 per content line, minimum 2
+			rowsNeeded := 1 + len(event.Content)
+			if rowsNeeded < 2 {
+				rowsNeeded = 2
+			}
+
 			if event.IsRight {
-				continue
-			}
-			if event.IsDark && !inDarkOutput {
-				fmt.Println(`                        <div class="dark-section">`)
-				inDarkOutput = true
-			} else if !event.IsDark && inDarkOutput {
-				fmt.Println(`                        </div>`)
-				inDarkOutput = false
-			}
+				// Right side - start at max of rightRow and centerRow
+				startRow := rightRow
+				if centerRow > startRow {
+					startRow = centerRow
+				}
 
-			timePart := event.Time
-			if len(event.Time) > 10 {
-				timePart = strings.TrimSpace(event.Time[10:])
-			}
-			darkClass := ""
-			if event.IsDark {
-				darkClass = " timestamp-dark"
-			}
+				cardClass := "event-card-lie"
+				if event.IsLie && event.IsContradiction {
+					cardClass = "event-card-both"
+				} else if event.IsContradiction {
+					cardClass = "event-card-contradiction"
+				}
 
-			fmt.Printf(
-				`                        <div class="event-wrapper event-wrapper-left" id="%s">
-                            <div class="timestamp timestamp-left%s">%s</div>
-                            <div class="event-card event-card-left">
-                                <div class="font-semibold text-gray-800 mb-2">%s</div>
-`,
-				event.ID,
-				darkClass,
-				html.EscapeString(timePart),
-				html.EscapeString(event.Title),
-			)
-			for _, line := range event.Content {
-				processed := processContent(line)
+				// Output timestamp in center
 				fmt.Printf(
-					`                                <p class="text-sm text-gray-600 mb-1">%s</p>
+					`                    <div class="event-cell-center" style="grid-row: %d;"><div class="timestamp timestamp-right%s">%s</div></div>
 `,
-					processed,
+					startRow, darkClass, html.EscapeString(timePart),
 				)
-			}
-			fmt.Println(`                            </div>
-                        </div>`)
-		}
-		if inDarkOutput {
-			fmt.Println(`                        </div>`)
-		}
 
-		fmt.Println(`                    </div>
-                    <div class="events-col-center"></div>
-                    <div class="events-col-right">`)
-
-		// Output right column (lies/contradictions)
-		inDarkOutput = false
-		for _, event := range day.Events {
-			if !event.IsRight {
-				continue
-			}
-			if event.IsDark && !inDarkOutput {
-				fmt.Println(`                        <div class="dark-section">`)
-				inDarkOutput = true
-			} else if !event.IsDark && inDarkOutput {
-				fmt.Println(`                        </div>`)
-				inDarkOutput = false
-			}
-
-			timePart := event.Time
-			if len(event.Time) > 10 {
-				timePart = strings.TrimSpace(event.Time[10:])
-			}
-			darkClass := ""
-			if event.IsDark {
-				darkClass = " timestamp-dark"
-			}
-
-			cardClass := "event-card-lie"
-			if event.IsLie && event.IsContradiction {
-				cardClass = "event-card-both"
-			} else if event.IsContradiction {
-				cardClass = "event-card-contradiction"
-			}
-			fmt.Printf(
-				`                        <div class="event-wrapper event-wrapper-right" id="%s">
-                            <div class="timestamp timestamp-right%s">%s</div>
-                            <div class="event-card %s">
-                                <div class="font-semibold text-gray-800 mb-2">%s</div>
-`,
-				event.ID,
-				darkClass,
-				html.EscapeString(timePart),
-				cardClass,
-				html.EscapeString(event.Title),
-			)
-			for _, line := range event.Content {
-				processed := processContent(line)
+				// Output card on right
 				fmt.Printf(
-					`                                <p class="text-sm text-gray-600 mb-1">%s</p>
+					`                    <div class="event-cell-right" style="grid-row: %d / span %d;" id="%s">
+                        <div class="event-card %s">
+                            <div class="font-semibold text-gray-800 mb-2">%s</div>
 `,
-					processed,
+					startRow, rowsNeeded, event.ID, cardClass, html.EscapeString(event.Title),
 				)
+				for _, line := range event.Content {
+					processed := processContent(line)
+					fmt.Printf(`                            <p class="text-sm text-gray-600 mb-1">%s</p>
+`, processed)
+				}
+				fmt.Println(`                        </div>
+                    </div>`)
+
+				rightRow = startRow + rowsNeeded
+				centerRow = startRow + 1
+			} else {
+				// Left side - start at max of leftRow and centerRow
+				startRow := leftRow
+				if centerRow > startRow {
+					startRow = centerRow
+				}
+
+				// Output card on left
+				fmt.Printf(
+					`                    <div class="event-cell-left" style="grid-row: %d / span %d;" id="%s">
+                        <div class="event-card event-card-left">
+                            <div class="font-semibold text-gray-800 mb-2">%s</div>
+`,
+					startRow, rowsNeeded, event.ID, html.EscapeString(event.Title),
+				)
+				for _, line := range event.Content {
+					processed := processContent(line)
+					fmt.Printf(`                            <p class="text-sm text-gray-600 mb-1">%s</p>
+`, processed)
+				}
+				fmt.Println(`                        </div>
+                    </div>`)
+
+				// Output timestamp in center
+				fmt.Printf(
+					`                    <div class="event-cell-center" style="grid-row: %d;"><div class="timestamp timestamp-left%s">%s</div></div>
+`,
+					startRow, darkClass, html.EscapeString(timePart),
+				)
+
+				leftRow = startRow + rowsNeeded
+				centerRow = startRow + 1
 			}
-			fmt.Println(`                            </div>
-                        </div>`)
-		}
-		if inDarkOutput {
-			fmt.Println(`                        </div>`)
 		}
 
-		fmt.Println(`                    </div>
-                </div>`)
+		fmt.Println(`                </div>`)
 		fmt.Println(`            </div>`)
 	}
 
