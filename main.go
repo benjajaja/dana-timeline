@@ -474,8 +474,61 @@ func generateHTML(days []Day, title string) {
                 <div class="events-container">
                     <div class="events-col-left">`)
 
-		// Output left column (lies/contradictions)
+		// Output left column (facts)
 		inDarkOutput := false
+		for _, event := range day.Events {
+			if event.IsRight {
+				continue
+			}
+			if event.IsDark && !inDarkOutput {
+				fmt.Println(`                        <div class="dark-section">`)
+				inDarkOutput = true
+			} else if !event.IsDark && inDarkOutput {
+				fmt.Println(`                        </div>`)
+				inDarkOutput = false
+			}
+
+			timePart := event.Time
+			if len(event.Time) > 10 {
+				timePart = strings.TrimSpace(event.Time[10:])
+			}
+			darkClass := ""
+			if event.IsDark {
+				darkClass = " timestamp-dark"
+			}
+
+			fmt.Printf(
+				`                        <div class="event-wrapper event-wrapper-left" id="%s">
+                            <div class="timestamp timestamp-left%s">%s</div>
+                            <div class="event-card event-card-left">
+                                <div class="font-semibold text-gray-800 mb-2">%s</div>
+`,
+				event.ID,
+				darkClass,
+				html.EscapeString(timePart),
+				html.EscapeString(event.Title),
+			)
+			for _, line := range event.Content {
+				processed := processContent(line)
+				fmt.Printf(
+					`                                <p class="text-sm text-gray-600 mb-1">%s</p>
+`,
+					processed,
+				)
+			}
+			fmt.Println(`                            </div>
+                        </div>`)
+		}
+		if inDarkOutput {
+			fmt.Println(`                        </div>`)
+		}
+
+		fmt.Println(`                    </div>
+                    <div class="events-col-center"></div>
+                    <div class="events-col-right">`)
+
+		// Output right column (lies/contradictions)
+		inDarkOutput = false
 		for _, event := range day.Events {
 			if !event.IsRight {
 				continue
@@ -504,8 +557,8 @@ func generateHTML(days []Day, title string) {
 				cardClass = "event-card-contradiction"
 			}
 			fmt.Printf(
-				`                        <div class="event-wrapper event-wrapper-left" id="%s">
-                            <div class="timestamp timestamp-left%s">%s</div>
+				`                        <div class="event-wrapper event-wrapper-right" id="%s">
+                            <div class="timestamp timestamp-right%s">%s</div>
                             <div class="event-card %s">
                                 <div class="font-semibold text-gray-800 mb-2">%s</div>
 `,
@@ -513,59 +566,6 @@ func generateHTML(days []Day, title string) {
 				darkClass,
 				html.EscapeString(timePart),
 				cardClass,
-				html.EscapeString(event.Title),
-			)
-			for _, line := range event.Content {
-				processed := processContent(line)
-				fmt.Printf(
-					`                                <p class="text-sm text-gray-600 mb-1">%s</p>
-`,
-					processed,
-				)
-			}
-			fmt.Println(`                            </div>
-                        </div>`)
-		}
-		if inDarkOutput {
-			fmt.Println(`                        </div>`)
-		}
-
-		fmt.Println(`                    </div>
-                    <div class="events-col-center"></div>
-                    <div class="events-col-right">`)
-
-		// Output right column (facts)
-		inDarkOutput = false
-		for _, event := range day.Events {
-			if event.IsRight {
-				continue
-			}
-			if event.IsDark && !inDarkOutput {
-				fmt.Println(`                        <div class="dark-section">`)
-				inDarkOutput = true
-			} else if !event.IsDark && inDarkOutput {
-				fmt.Println(`                        </div>`)
-				inDarkOutput = false
-			}
-
-			timePart := event.Time
-			if len(event.Time) > 10 {
-				timePart = strings.TrimSpace(event.Time[10:])
-			}
-			darkClass := ""
-			if event.IsDark {
-				darkClass = " timestamp-dark"
-			}
-
-			fmt.Printf(
-				`                        <div class="event-wrapper event-wrapper-right" id="%s">
-                            <div class="timestamp timestamp-right%s">%s</div>
-                            <div class="event-card event-card-left">
-                                <div class="font-semibold text-gray-800 mb-2">%s</div>
-`,
-				event.ID,
-				darkClass,
-				html.EscapeString(timePart),
 				html.EscapeString(event.Title),
 			)
 			for _, line := range event.Content {
