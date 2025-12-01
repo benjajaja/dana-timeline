@@ -12,6 +12,7 @@ import (
 type Event struct {
 	Time            string
 	Title           string
+	Characters      []string // #### headers - references ./characters/<name>.png
 	Content         []string
 	IsRight         bool // true if contains ❌ or ⁉️
 	IsLie           bool // ❌ - proven lie
@@ -59,6 +60,7 @@ func parseTimeline(filename string) ([]Day, string) {
 	dayDateRe := regexp.MustCompile(`^# (\d{4}-\d{2}-\d{2})`)
 	timeRe := regexp.MustCompile(`^## (\d{4}-\d{2}-\d{2}[^#]*)$`)
 	eventTitleRe := regexp.MustCompile(`^### (.+)$`)
+	characterRe := regexp.MustCompile(`^#### (.+)$`)
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -154,6 +156,12 @@ func parseTimeline(filename string) ([]Day, string) {
 				currentEvent.IsRight = true
 				currentEvent.IsContradiction = true
 			}
+			continue
+		}
+
+		// Character reference (#### header after event title)
+		if matches := characterRe.FindStringSubmatch(line); matches != nil && currentEvent != nil {
+			currentEvent.Characters = append(currentEvent.Characters, matches[1])
 			continue
 		}
 
@@ -383,6 +391,25 @@ func generateHTML(days []Day, title string) {
         .event-wrapper {
             display: contents;
         }
+        .event-card {
+            position: relative;
+        }
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: absolute;
+            top: -12px;
+            border: 3px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .avatar-left {
+            left: -30px;
+        }
+        .avatar-right {
+            right: -30px;
+        }
         @media (max-width: 800px) {
             .timeline-line {
                 display: none;
@@ -412,6 +439,13 @@ func generateHTML(days []Day, title string) {
             }
             .event-card {
                 margin-bottom: 0;
+            }
+            .avatar {
+                width: 36px;
+                height: 36px;
+                top: -8px;
+                left: -12px;
+                right: auto;
             }
         }
     </style>
@@ -510,10 +544,19 @@ func generateHTML(days []Day, title string) {
 				// Output card on right
 				fmt.Printf(
 					`                        <div class="event-cell-right" style="grid-row: %d / span %d;" id="%s">
-                            <div class="event-card %s">
+                            <div class="event-card %s">`,
+					startRow, rowsNeeded, event.ID, cardClass,
+				)
+				for i, char := range event.Characters {
+					fmt.Printf(`
+                                <img src="./characters/%s.png" alt="%s" class="avatar avatar-left" style="top: %dpx;">`,
+						html.EscapeString(char), html.EscapeString(char), -12+(i*38),
+					)
+				}
+				fmt.Printf(`
                                 <div class="font-semibold text-gray-800 mb-2">%s</div>
 `,
-					startRow, rowsNeeded, event.ID, cardClass, html.EscapeString(event.Title),
+					html.EscapeString(event.Title),
 				)
 				for _, line := range event.Content {
 					processed := processContent(line)
@@ -546,10 +589,19 @@ func generateHTML(days []Day, title string) {
 				// Output card on left
 				fmt.Printf(
 					`                        <div class="event-cell-left" style="grid-row: %d / span %d;" id="%s">
-                            <div class="event-card event-card-left">
+                            <div class="event-card event-card-left">`,
+					startRow, rowsNeeded, event.ID,
+				)
+				for i, char := range event.Characters {
+					fmt.Printf(`
+                                <img src="./characters/%s.png" alt="%s" class="avatar avatar-right" style="top: %dpx;">`,
+						html.EscapeString(char), html.EscapeString(char), -12+(i*38),
+					)
+				}
+				fmt.Printf(`
                                 <div class="font-semibold text-gray-800 mb-2">%s</div>
 `,
-					startRow, rowsNeeded, event.ID, html.EscapeString(event.Title),
+					html.EscapeString(event.Title),
 				)
 				for _, line := range event.Content {
 					processed := processContent(line)
