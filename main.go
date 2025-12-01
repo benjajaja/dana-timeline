@@ -380,26 +380,38 @@ func generateHTML(days []Day, title string) {
             padding-top: 1rem;
             padding-bottom: 1rem;
         }
+        .event-wrapper {
+            display: contents;
+        }
         @media (max-width: 800px) {
+            .timeline-line {
+                display: none;
+            }
             .events-container {
                 display: flex;
                 flex-direction: column;
+                gap: 0.5rem;
             }
-            .event-cell-left, .event-cell-right, .event-cell-center {
+            .event-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+            .event-cell-left,
+            .event-cell-right,
+            .event-cell-center {
                 padding: 0;
             }
             .event-cell-center {
                 justify-content: flex-start;
-                margin-bottom: 0.5rem;
             }
             .timestamp::before {
                 display: none;
             }
-            .timeline-line {
-                display: none;
+            .timestamp {
+                margin-bottom: 0.25rem;
             }
-            .text-center.my-4 {
-                text-align: left;
+            .event-card {
+                margin-bottom: 0;
             }
         }
     </style>
@@ -485,27 +497,31 @@ func generateHTML(days []Day, title string) {
 					cardClass = "event-card-contradiction"
 				}
 
-				// Output timestamp in center
+				// Wrapper for mobile layout
+				fmt.Println(`                    <div class="event-wrapper">`)
+
+				// Output timestamp in center (first for mobile)
 				fmt.Printf(
-					`                    <div class="event-cell-center" style="grid-row: %d;"><div class="timestamp timestamp-right%s">%s</div></div>
+					`                        <div class="event-cell-center" style="grid-row: %d;"><div class="timestamp timestamp-right%s">%s</div></div>
 `,
 					startRow, darkClass, html.EscapeString(timePart),
 				)
 
 				// Output card on right
 				fmt.Printf(
-					`                    <div class="event-cell-right" style="grid-row: %d / span %d;" id="%s">
-                        <div class="event-card %s">
-                            <div class="font-semibold text-gray-800 mb-2">%s</div>
+					`                        <div class="event-cell-right" style="grid-row: %d / span %d;" id="%s">
+                            <div class="event-card %s">
+                                <div class="font-semibold text-gray-800 mb-2">%s</div>
 `,
 					startRow, rowsNeeded, event.ID, cardClass, html.EscapeString(event.Title),
 				)
 				for _, line := range event.Content {
 					processed := processContent(line)
-					fmt.Printf(`                            <p class="text-sm text-gray-600 mb-1">%s</p>
+					fmt.Printf(`                                <p class="text-sm text-gray-600 mb-1">%s</p>
 `, processed)
 				}
-				fmt.Println(`                        </div>
+				fmt.Println(`                            </div>
+                        </div>
                     </div>`)
 
 				rightRow = startRow + rowsNeeded
@@ -517,28 +533,32 @@ func generateHTML(days []Day, title string) {
 					startRow = centerRow
 				}
 
+				// Wrapper for mobile layout
+				fmt.Println(`                    <div class="event-wrapper">`)
+
+				// Output timestamp in center (first for mobile)
+				fmt.Printf(
+					`                        <div class="event-cell-center" style="grid-row: %d;"><div class="timestamp timestamp-left%s">%s</div></div>
+`,
+					startRow, darkClass, html.EscapeString(timePart),
+				)
+
 				// Output card on left
 				fmt.Printf(
-					`                    <div class="event-cell-left" style="grid-row: %d / span %d;" id="%s">
-                        <div class="event-card event-card-left">
-                            <div class="font-semibold text-gray-800 mb-2">%s</div>
+					`                        <div class="event-cell-left" style="grid-row: %d / span %d;" id="%s">
+                            <div class="event-card event-card-left">
+                                <div class="font-semibold text-gray-800 mb-2">%s</div>
 `,
 					startRow, rowsNeeded, event.ID, html.EscapeString(event.Title),
 				)
 				for _, line := range event.Content {
 					processed := processContent(line)
-					fmt.Printf(`                            <p class="text-sm text-gray-600 mb-1">%s</p>
+					fmt.Printf(`                                <p class="text-sm text-gray-600 mb-1">%s</p>
 `, processed)
 				}
-				fmt.Println(`                        </div>
+				fmt.Println(`                            </div>
+                        </div>
                     </div>`)
-
-				// Output timestamp in center
-				fmt.Printf(
-					`                    <div class="event-cell-center" style="grid-row: %d;"><div class="timestamp timestamp-left%s">%s</div></div>
-`,
-					startRow, darkClass, html.EscapeString(timePart),
-				)
 
 				leftRow = startRow + rowsNeeded
 				centerRow = startRow + 1
