@@ -211,6 +211,7 @@ func processContent(content string) string {
 		match = strings.ReplaceAll(match, "&amp;", "&")
 		match = strings.ReplaceAll(match, "&lt;", "<")
 		match = strings.ReplaceAll(match, "&gt;", ">")
+		match = strings.ReplaceAll(match, "&#34;", "\"")
 
 		submatches := imgRe.FindStringSubmatch(match)
 		if len(submatches) == 3 {
@@ -240,6 +241,7 @@ func processContent(content string) string {
 		match = strings.ReplaceAll(match, "&amp;", "&")
 		match = strings.ReplaceAll(match, "&lt;", "<")
 		match = strings.ReplaceAll(match, "&gt;", ">")
+		match = strings.ReplaceAll(match, "&#34;", "\"")
 
 		submatches := linkRe.FindStringSubmatch(match)
 		if len(submatches) == 3 {
