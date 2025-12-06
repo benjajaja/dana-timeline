@@ -267,7 +267,7 @@ func generateHTML(days []Day, title string) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>` + html.EscapeString(title) + `</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
     <style>
         .timeline-line {
             position: absolute;
