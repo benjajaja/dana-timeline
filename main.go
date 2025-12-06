@@ -540,14 +540,19 @@ func generateHTML(days []Day, title string) {
 				fmt.Printf(
 					`                        <div class="event-cell-center" style="grid-row: %d;"><div class="timestamp timestamp-right%s">%s</div></div>
 `,
-					startRow, darkClass, html.EscapeString(timePart),
+					startRow,
+					darkClass,
+					html.EscapeString(timePart),
 				)
 
 				// Output card on right
 				fmt.Printf(
 					`                        <div class="event-cell-right" style="grid-row: %d / span %d;" id="%s">
                             <div class="event-card %s">`,
-					startRow, rowsNeeded, event.ID, cardClass,
+					startRow,
+					rowsNeeded,
+					event.ID,
+					cardClass,
 				)
 				for i, char := range event.Characters {
 					fmt.Printf(`
@@ -562,8 +567,11 @@ func generateHTML(days []Day, title string) {
 				)
 				for _, line := range event.Content {
 					processed := processContent(line)
-					fmt.Printf(`                                <p class="text-sm text-gray-600 mb-1">%s</p>
-`, processed)
+					fmt.Printf(
+						`                                <p class="text-sm text-gray-600 mb-1">%s</p>
+`,
+						processed,
+					)
 				}
 				fmt.Println(`                            </div>
                         </div>
@@ -624,6 +632,17 @@ func generateHTML(days []Day, title string) {
 	}
 
 	fmt.Println(`        </div>
+	<div class="event-card" style="margin: 2em 4em">
+			<img src="./characters/Abogado.png" alt="Abogado" class="avatar avatar-left" style="top: -12px;">
+
+			<div class="font-semibold text-gray-800 mb-2">
+				Abogado
+			</div>
+			<a
+				href="http://github.com/benjajaja/dana-timeline"
+				class="text-blue-600 hover:text-blue-800 underline"
+			>Código fuente y correciones</a>
+		</div>
     </div>
 </body>
 </html>`)
