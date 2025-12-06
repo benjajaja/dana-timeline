@@ -201,34 +201,32 @@ func makeID(s string) string {
 }
 
 func processContent(content string) string {
-	// Escape HTML
-	escaped := html.EscapeString(content)
+	// Process blockquotes first (lines starting with >)
+	if strings.HasPrefix(content, ">") {
+		inner := strings.TrimPrefix(content, ">")
+		inner = strings.TrimPrefix(inner, " ")
+		return fmt.Sprintf(
+			`<blockquote class="border-l-4 border-gray-300 pl-3 ml-2 text-gray-600">%s</blockquote>`,
+			inner,
+		)
+	}
 
 	// Process markdown images ![alt](url) - must be before links
 	imgRe := regexp.MustCompile(`!\[([^\]]*)\]\(([^)]+)\)`)
-	escaped = imgRe.ReplaceAllStringFunc(escaped, func(match string) string {
-		// Unescape for processing
-		match = strings.ReplaceAll(match, "&amp;", "&")
-		match = strings.ReplaceAll(match, "&lt;", "<")
-		match = strings.ReplaceAll(match, "&gt;", ">")
-		match = strings.ReplaceAll(match, "&#34;", "\"")
-
+	content = imgRe.ReplaceAllStringFunc(content, func(match string) string {
 		submatches := imgRe.FindStringSubmatch(match)
 		if len(submatches) == 3 {
-			alt := submatches[1]
-			url := submatches[2]
-			// Check if it's an mp4 file - render as video player
+			alt, url := submatches[1], submatches[2]
 			if strings.HasSuffix(strings.ToLower(url), ".mp4") {
 				return fmt.Sprintf(
 					`<video controls class="max-w-full h-auto rounded my-2"><source src="%s" type="video/mp4">%s</video>`,
 					url,
-					html.EscapeString(alt),
+					alt,
 				)
 			}
 			return fmt.Sprintf(
 				`<img src="%s" alt="%s" class="max-w-full h-auto rounded my-2">`,
-				url,
-				html.EscapeString(alt),
+				url, alt,
 			)
 		}
 		return match
@@ -236,29 +234,20 @@ func processContent(content string) string {
 
 	// Process markdown links [text](url)
 	linkRe := regexp.MustCompile(`\[([^\]]+)\]\(([^)]+)\)`)
-	escaped = linkRe.ReplaceAllStringFunc(escaped, func(match string) string {
-		// Unescape for processing
-		match = strings.ReplaceAll(match, "&amp;", "&")
-		match = strings.ReplaceAll(match, "&lt;", "<")
-		match = strings.ReplaceAll(match, "&gt;", ">")
-		match = strings.ReplaceAll(match, "&#34;", "\"")
-
+	content = linkRe.ReplaceAllStringFunc(content, func(match string) string {
 		submatches := linkRe.FindStringSubmatch(match)
 		if len(submatches) == 3 {
-			text := submatches[1]
-			url := submatches[2]
-			// Internal anchor links don't need target="_blank"
+			text, url := submatches[1], submatches[2]
 			if strings.HasPrefix(url, "#") {
 				return fmt.Sprintf(
 					`<a href="%s" class="text-blue-600 hover:text-blue-800 underline">%s</a>`,
-					url,
-					html.EscapeString(text),
+					url, text,
 				)
 			}
 			return fmt.Sprintf(
 				`<a href="%s" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener">%s</a>`,
 				url,
-				html.EscapeString(text),
+				text,
 			)
 		}
 		return match
@@ -266,20 +255,9 @@ func processContent(content string) string {
 
 	// Process bold **text**
 	boldRe := regexp.MustCompile(`\*\*([^*]+)\*\*`)
-	escaped = boldRe.ReplaceAllString(escaped, `<strong class="font-semibold">$1</strong>`)
+	content = boldRe.ReplaceAllString(content, `<strong class="font-semibold">$1</strong>`)
 
-	// Process blockquotes (lines starting with >)
-	// After HTML escaping, > becomes &gt;
-	if strings.HasPrefix(escaped, "&gt;") {
-		inner := strings.TrimPrefix(escaped, "&gt;")
-		inner = strings.TrimPrefix(inner, " ") // optional space after >
-		escaped = fmt.Sprintf(
-			`<blockquote class="border-l-4 border-gray-300 pl-3 ml-2 text-gray-600">%s</blockquote>`,
-			inner,
-		)
-	}
-
-	return escaped
+	return content
 }
 
 func generateHTML(days []Day, title string) {
@@ -636,12 +614,33 @@ func generateHTML(days []Day, title string) {
 			<img src="./characters/Abogado.png" alt="Abogado" class="avatar avatar-left" style="top: -12px;">
 
 			<div class="font-semibold text-gray-800 mb-2">
-				Abogado
+				Fuente
 			</div>
-			<a
-				href="http://github.com/benjajaja/dana-timeline"
-				class="text-blue-600 hover:text-blue-800 underline"
-			>Código fuente y correciones</a>
+			<p>
+				Esta cronología recopila información de medios públicos y otras fuentes.
+				Parte del contenido ha sido parafraseado o resumido.
+				No se garantiza la exactitud total de los datos.
+				Las fuentes originales son responsables de su contenido.	
+			</p>
+			<p>
+				"❌ Mentira" indica una contradicción absoluta entre dos declaraciones, con conocimiento entre las dos de los declarantes.
+			</p>
+			<p>
+				<a
+					href="http://github.com/benjajaja/dana-timeline"
+					class="text-blue-600 hover:text-blue-800 underline"
+				>Código fuente</a>
+				|
+				<a
+					href="http://github.com/benjajaja/dana-timeline/issues"
+					class="text-blue-600 hover:text-blue-800 underline"
+				>Envío de correciones</a>
+				|
+				<a
+					href="http://github.com/benjajaja/dana-timeline/discussions"
+					class="text-blue-600 hover:text-blue-800 underline"
+				>Discusión</a>
+			</p>
 		</div>
     </div>
 </body>
