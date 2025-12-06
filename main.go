@@ -643,6 +643,8 @@ func generateHTML(days []Day, title string) {
 			</p>
 		</div>
     </div>
+    <script data-goatcounter="https://benjajaja.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>`)
 }
