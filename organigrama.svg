@@ -25,8 +25,8 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="0.46362714"
-     inkscape:cx="843.35011"
-     inkscape:cy="724.7203"
+     inkscape:cx="1084.9235"
+     inkscape:cy="558.63856"
      inkscape:window-width="1707"
      inkscape:window-height="944"
      inkscape:window-x="0"
@@ -115,7 +115,7 @@
          inkscape:connector-curvature="0"
          inkscape:connection-start="#g126"
          inkscape:connection-end="#g118"
-         d="m 348.31179,122.4149 v 11.40987" /><path
+         d="M 348.31179,76.760397 V 91.568714" /><path
          style="fill:none;fill-rule:evenodd;stroke:#e5ac04;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
          d="m 21.294004,164.67095 v 11.40987"
          id="path140"
@@ -639,7 +639,7 @@
            cy="62.537182"
            r="15.423093" /></g></g><g
        id="g148"
-       transform="translate(296.4843,15.873482)"><g
+       transform="translate(296.4843,-26.382573)"><g
          id="g117"
          transform="translate(105.86138,70.837198)"><rect
            style="fill:#eb907b;fill-opacity:1;stroke:#db2220;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
@@ -690,7 +690,7 @@
            cy="62.537182"
            r="15.423093" /></g></g><g
        id="g150"
-       transform="translate(296.4843,11.664362)"><g
+       transform="translate(296.4843,96.17647)"><g
          id="g121"
          transform="translate(105.86138,-9.4657907)"><rect
            style="fill:#eb907b;fill-opacity:1;stroke:#db2220;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
@@ -741,7 +741,7 @@
            cy="62.537182"
            r="15.423093" /></g></g><g
        id="g149"
-       transform="translate(296.4843,19.216611)"><g
+       transform="translate(296.4843,-26.437892)"><g
          id="g125"
          transform="translate(105.86138,25.238014)"><rect
            style="fill:#eb907b;fill-opacity:1;stroke:#db2220;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
