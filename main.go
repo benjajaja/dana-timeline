@@ -434,13 +434,13 @@ func generateHTML(days []Day, title string) {
     <div class="max-w-7xl mx-auto py-8 px-4">
         <h1 class="text-4xl font-bold text-center mb-12 text-gray-800">` + html.EscapeString(title) + `</h1>
 
-        <h1 class="text-xl font-bold text-center mb-12 text-gray-800">Organigrama</h1>
-
-		<div>
+		<div class="event-card">
+			<h1 class="text-xl font-bold text-center text-gray-800">Organigrama</h1>
 			<object type="image/svg+xml" data="organigrama.svg" style="width:100%">Organigrama</object>
 		</div>
 
-        <h1 class="text-xl font-bold text-center mb-12 text-gray-800">Timeline</h1>
+		<h1 class="text-xl font-bold text-center mt-12 text-gray-800">Timeline</h1>
+
         <div class="relative">
             <div class="timeline-line"></div>`)
 
