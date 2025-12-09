@@ -1,0 +1,26 @@
+name: Update Timeline
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  update-timeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
+      - name: Generate timeline
+        run: go run main.go timeline > index.html
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "update index.html"
+          title: "Update generated index.html"
+          branch: auto-update-timeline
+          delete-branch: true
