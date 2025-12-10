@@ -200,7 +200,7 @@ func makeID(s string) string {
 	return s
 }
 
-func processContent(content string) string {
+func processContent(content string, eventCharacters map[string][]string) string {
 	// Process blockquotes first (lines starting with >)
 	if strings.HasPrefix(content, ">") {
 		inner := strings.TrimPrefix(content, ">")
@@ -239,9 +239,20 @@ func processContent(content string) string {
 		if len(submatches) == 3 {
 			text, url := submatches[1], submatches[2]
 			if strings.HasPrefix(url, "#") {
+				// Internal crosslink - add mini character avatars
+				targetID := strings.TrimPrefix(url, "#")
+				avatarHTML := ""
+				if chars, ok := eventCharacters[targetID]; ok {
+					for _, char := range chars {
+						avatarHTML += fmt.Sprintf(
+							`<img src="./characters/%s.png" alt="%s" class="mini-avatar">`,
+							html.EscapeString(char), html.EscapeString(char),
+						)
+					}
+				}
 				return fmt.Sprintf(
-					`<a href="%s" class="text-blue-600 hover:text-blue-800 underline">%s</a>`,
-					url, text,
+					`%s<a href="%s" class="text-blue-600 hover:text-blue-800 underline">%s</a>`,
+					avatarHTML, url, text,
 				)
 			}
 			return fmt.Sprintf(
@@ -261,6 +272,16 @@ func processContent(content string) string {
 }
 
 func generateHTML(days []Day, title string) {
+	// Build map of event IDs to their characters for crosslink avatars
+	eventCharacters := make(map[string][]string)
+	for _, day := range days {
+		for _, event := range day.Events {
+			if len(event.Characters) > 0 {
+				eventCharacters[event.ID] = event.Characters
+			}
+		}
+	}
+
 	fmt.Println(`<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -389,6 +410,17 @@ func generateHTML(days []Day, title string) {
         }
         .avatar-right {
             right: -30px;
+        }
+        .mini-avatar {
+            display: inline-block;
+            width: 1.2em;
+            height: 1.2em;
+            border-radius: 50%;
+            object-fit: cover;
+            vertical-align: text-bottom;
+            margin-right: 2px;
+            border: 1px solid white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
         }
         .event-title {
             position: relative;
@@ -555,7 +587,7 @@ func generateHTML(days []Day, title string) {
 					html.EscapeString(event.Title), event.ID,
 				)
 				for _, line := range event.Content {
-					processed := processContent(line)
+					processed := processContent(line, eventCharacters)
 					fmt.Printf(
 						`                                <p class="text-sm text-gray-600 mb-1">%s</p>
 `,
@@ -603,7 +635,7 @@ func generateHTML(days []Day, title string) {
 					html.EscapeString(event.Title), event.ID,
 				)
 				for _, line := range event.Content {
-					processed := processContent(line)
+					processed := processContent(line, eventCharacters)
 					fmt.Printf(`                                <p class="text-sm text-gray-600 mb-1">%s</p>
 `, processed)
 				}
