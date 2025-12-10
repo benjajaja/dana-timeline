@@ -23,6 +23,12 @@ Ver: [2025-05-15](#2025-05-15)
 #### AEMET
 AEMET emite el primer aviso alertando de una DANA que se aproxima a la Comunidad Valenciana para los días siguientes.
 
+![Avisos vs. Alertas](./images/Avisos_vs_Alertas_2.png)
+
+⚠️ **IMPORTANTE - Avisos ≠ Alertas**: AEMET emite **avisos meteorológicos** (amarillo, naranja, rojo). Las **alertas a la población** (ES-Alert, confinamientos) son responsabilidad de Protección Civil y las Comunidades Autónomas. Esta distinción será deliberadamente confundida por los implicados para desplazar responsabilidades. Ver: [2024-10-31 ~10:00](#2024-10-31-1000), [2024-11-15 10:00](#2024-11-15-1000), [2025-11-30 21:30](#2025-11-30-2130), [2025-12-01 ~10:00](#2025-12-01-1000)
+
+[Avisos vs. Alertas. ¿Por qué existe esta dualidad y en qué consiste? - Blog AEMET](https://aemetblog.es/2025/12/10/avisos-vs-alertas-por-que-existe-esta-dualidad-y-en-que-consiste/)
+
 # 2024-10-25
 
 ## 2024-10-25 ~10:00
@@ -907,11 +913,20 @@ Alberto Núñez Feijóo, líder del PP nacional, visita el CECOPI de L'Eliana ju
 ## 2024-10-31 ~10:00
 ### Declaraciones de Feijóo: "emergencia nacional"
 #### Feijóo
-Feijóo declara: "Estamos ante una emergencia nacional". Culpa al Gobierno central y cuestiona a AEMET: "Son organismos dependientes del Gobierno central". Defiende a Mazón: "El presidente tomó decisiones con información de organismos estatales".
+Feijóo declara: "Estamos ante una emergencia nacional". Culpa al Gobierno central y cuestiona a AEMET:
+
+> La información que se recibe depende de organismos con competencia exclusiva del Gobierno central, véase la AEMET o la Confederación Hidrográfica.
+
+> Nadie puede tomar decisiones en función de una información que puede ser exacta, inexacta, mejorable. Las decisiones se toman en función de la información que te facilitan en cada momento.
+
+❌ **CONFUSIÓN DELIBERADA avisos/alertas**: Feijóo insinúa que AEMET proporcionó información deficiente, cuando AEMET emitió avisos correctos desde el 24 de octubre. La responsabilidad de traducir esos avisos en alertas a la población era de la Generalitat. Ver: [2024-10-24 ~12:00](#2024-10-24-1200)
 
 ⁉️ **CONTRADICCIÓN**: Minutos más tarde, en paralelo, Mazón comparece junto con Pedro Sánchez, agradeciendo su rápida actuación.
 
-⁉️ **CONTRADICCIÓN**: Un año más tarde, Feijóo cree que la dimisión de Mazón es acertada. [ver: 2025-11-03 ~09:00](#2025-11-03-0900)
+⁉️ **CONTRADICCIÓN**: Un año más tarde, Feijóo cree que la dimisión de Mazón es acertada. Ver: [2025-11-03 ~09:00](#2025-11-03-0900)
+
+[Feijóo sale en defensa de Mazón y cuestiona las previsiones de la AEMET - elDiario.es](https://www.eldiario.es/politica/feijoo-sale-defensa-mazon-cuestiona-previsiones-aemet-dana_1_11780615.html)
+[La AEMET sí hizo su trabajo (a pesar de Feijóo) - Climática](https://climatica.coop/la-aemet-si-hizo-su-trabajo-a-pesar-de-feijoo/)
 
 ## 2024-10-31 10:30
 ### Sánchez visita Valencia
@@ -1107,15 +1122,28 @@ Mazón anuncia cambios en su gobierno sin dimitir.
 # 2024-11-15
 
 ## 2024-11-15 10:00
-### Comparecencia de Mazón en Les Corts Valencianes: MENTIRA DEL TRÁFICO
+### Comparecencia de Mazón en Les Corts Valencianes
 #### Mazón
 Mazón comparece ante el pleno de Les Corts para dar explicaciones. Reconoce "fallos" y pide "disculpas", pero no concreta la hora de llegada al CECOPI. Justifica su tardanza diciendo: "No fue fácil el viaje. **El mal tiempo**, como es normal en estas situaciones, produjo **gran densidad de tráfico** y alargó el trayecto hasta que llegué a L'Eliana".
 
-❌ **MENTIRA PROBADA**: Según datos de la Conselleria de Transportes, la DGT y AEMET consultados por elDiario.es, en el recorrido del Palau a L'Eliana el 29 de octubre **no llovió ni hubo densidad de tráfico distinta a la habitual**.
+❌ **MENTIRA DEL TRÁFICO**: Según datos de la Conselleria de Transportes, la DGT y AEMET consultados por elDiario.es, en el recorrido del Palau a L'Eliana el 29 de octubre **no llovió ni hubo densidad de tráfico distinta a la habitual**.
+
+❌ **CONFUSIÓN DELIBERADA avisos/alertas**: Descarga la responsabilidad en AEMET y la CHJ:
+
+> No es lo mismo un episodio de lluvias torrenciales, que era para lo que todo estaba todo previsto desde días antes, que la monstruosa barrancada en el barranco del Poyo provocada por un fenómeno atmosférico que superó las peores previsiones de la AEMET.
+
+> A esa hora, AEMET aún mantenía que a las 18 horas el temporal se desplazaba a la serranía de Cuenca.
+
+> ¿Cómo se pudo pasar de un caudal completamente seco, según la Confederación, a un tsunami? Es una pregunta que aún debe ser respondida.
+
+Mazón insinúa que AEMET debía haber "alertado" de forma diferente. AEMET emite **avisos meteorológicos**, no alertas a la población. La alerta ES-Alert era responsabilidad de la Generalitat. Ver: [2024-10-24 ~12:00](#2024-10-24-1200)
+
+❌ **MENTIRA "superó las previsiones"**: AEMET emitió aviso rojo (máximo nivel) a las 7:36. El jefe de AEMET declaró que las palabras de Mazón a las 11:47 fueron "incomprensibles" porque "no coincidían con nuestras previsiones". Ver: [2025-06-02 ~10:00](#2025-06-02-1000)
 
 **Lee un discurso de 23 minutos sin contestar preguntas directas**.
 
-[Mazón, mil y una mentiras sobre la dana para un año sin coartada - elDiario.es](https://www.eldiario.es/comunitat-valenciana/mazon-mil-mentiras-dana-ano-coartada_1_12708368.html)
+[Mazón descarga toda la responsabilidad en la AEMET y la CHJ - Deia](https://www.deia.eus/politica/2024/11/15/mazon-enfrenta-comparecencia-les-corts-8935386.html)
+[Mazón, mil y una mentiras sobre la dana - elDiario.es](https://www.eldiario.es/comunitat-valenciana/mazon-mil-mentiras-dana-ano-coartada_1_12708368.html)
 
 # 226 Muertos y 14 desaparecidos
 
@@ -1573,6 +1601,16 @@ La jueza que investiga la DANA concluye que es altamente improbable que Maribel 
 #### Pradas
 La Sexta emite una entrevista a la consellera Salomé Pradas en el programa Salvados. En ella, Pradas realiza varias afirmaciones que contradicen los hechos probados en la investigación:
 
+❌ **CONFUSIÓN DELIBERADA avisos/alertas**: Pradas culpa a AEMET y la CHJ de la falta de información:
+
+> [AEMET y CHJ] no dieron información en tiempo real.
+
+> La Aemet falló en sus predicciones.
+
+> Hasta en tres ocasiones la Aemet informó a Emergencias que las lluvias se iban hacia la serranía de Cuenca.
+
+AEMET emite **avisos meteorológicos**, y el aviso rojo (máximo nivel) estuvo activo desde las 7:36. La responsabilidad de traducir esos avisos en alertas a la población era de la Generalitat. Ver: [2024-10-24 ~12:00](#2024-10-24-1200)
+
 ❌ **MENTIRA 1 - "El ES-Alert se envió por la rotura de Forata"**: Pradas afirma que el ES-Alert se envió debido al riesgo de rotura de la presa de Forata. **FALSO**: El borrador del ES-Alert estaba preparado a las 18:37, antes de que Hugo Morán llamara a las 19:45 para advertir sobre Forata. Ver: [2024-10-29 18:37](#2024-10-29-1837) y [2024-10-29 19:45](#2024-10-29-1945)
 
 ❌ **MENTIRA 2 - "Estábamos desinformados en el CECOPI"**: Pradas sugiere que no tenían información suficiente. **FALSO**: La jefa de prensa de Emergencias declaró ante la jueza: "No creo que estuviéramos en una burbuja. Sabíamos lo que pasaba". Ver: [2025-11-11 ~10:00](#2025-11-11-1000)
@@ -1583,15 +1621,32 @@ La Sexta emite una entrevista a la consellera Salomé Pradas en el programa Salv
 
 ⁉️ **CONTRADICCIÓN sobre la hora del ES-Alert**: Pradas da versiones diferentes sobre cuándo se enteró de la existencia del ES-Alert (19:00 vs 20:01). Ver: [2024-10-29 19:00](#2024-10-29-1900) y [2024-10-29 20:01](#2024-10-29-2001)
 
+[Pradas cree que el informe avala la "falta de avisos" de CHJ y Aemet - El Español](https://www.elespanol.com/valencia/20250908/pradas-cree-informe-emergencias-avala-declaracion-falta-avisos-fallos-chj-aemet/1003743916296_0.html)
 [Mentiras y verdades de la entrevista a Pradas - El País](https://elpais.com/espana/2025-11-30/mentiras-y-verdades-de-la-entrevista-a-pradas-ni-el-es-alert-se-envio-por-la-rotura-de-forata-ni-estaban-desinformados-en-el-cecopi.html)
 
 # 2025-12-01
+
+## 2025-12-01 ~10:00
+### Cuenca comparece en el Congreso
+#### Cuenca
+José Manuel Cuenca, jefe de gabinete de Mazón, comparece en la comisión de investigación de la DANA del Congreso. Sigue la línea de culpar a AEMET:
+
+> Si hubiéramos sabido lo que al final ocurrió, hubiéramos actuado de otra manera, pero es que nadie sabía nada.
+
+> Se sabía que el temporal barrería del sur al norte y que sobre las 18h escamparía.
+
+❌ **CONFUSIÓN DELIBERADA avisos/alertas**: Cuenca insinúa que AEMET no informó correctamente, cuando el aviso rojo (máximo nivel) estuvo activo desde las 7:36 y se prolongó más allá de las 18:00. La responsabilidad de traducir esos avisos en alertas a la población era de la Generalitat. Ver: [2024-10-24 ~12:00](#2024-10-24-1200)
+
+❌ **MENTIRA "nadie sabía nada"**: Los WhatsApps demuestran que Cuenca fue informado a las 14:25 de que "la cosa se complica en Utiel" y a las 16:28 de un fallecido. Ver: [2024-10-29 14:25](#2024-10-29-1425), [2024-10-29 16:28](#2024-10-29-1628)
+
+[El jefe de Gabinete de Mazón en la comisión de la dana - El Español](https://www.elespanol.com/valencia/20251201/jefe-gabinete-mazon-comision-dana-nadie-reclamo-presidente-ningun-sitio-dia/1003744037352_0.html)
+[Valencia Plaza](https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/el-jefe-de-gabinete-de-mazon-excusa-su-ausencia-en-la-dana-no-le-reclamaron)
 
 ## 2025-12-01 13:39
 ### El PP valenciano otorga a Mazón la portavocía de la Comisión de Reglamento
 #### PP
 #### Mazón
-El PP valenciano otorga a Mazón la portavocía de la Comisión de Reglamento. Esto supondrá una retribución extra para el expresident de 634€ al mes 
+El PP valenciano otorga a Mazón la portavocía de la Comisión de Reglamento. Esto supondrá una retribución extra para el expresident de 634€ al mes
 
 [RTVE Twitter](https://x.com/rtvenoticias/status/1995487886016463332)
 
