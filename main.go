@@ -225,8 +225,8 @@ func processContent(content string) string {
 				)
 			}
 			return fmt.Sprintf(
-				`<img src="%s" alt="%s" class="max-w-full h-auto rounded my-2">`,
-				url, alt,
+				`<a href="%s"><img src="%s" alt="%s" class="max-w-full h-auto rounded my-2"></a>`,
+				url, url, alt,
 			)
 		}
 		return match
@@ -245,7 +245,7 @@ func processContent(content string) string {
 				)
 			}
 			return fmt.Sprintf(
-				`<a href="%s" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener">%s</a>`,
+				`<a href="%s" class="text-blue-600 hover:text-blue-800 underline">%s</a>`,
 				url,
 				text,
 			)
