@@ -206,7 +206,7 @@ func processContent(content string) string {
 		inner := strings.TrimPrefix(content, ">")
 		inner = strings.TrimPrefix(inner, " ")
 		return fmt.Sprintf(
-			`<blockquote class="border-l-4 border-gray-300 pl-3 ml-2 text-gray-600">%s</blockquote>`,
+			`<blockquote class="border-l-4 border-gray-300 pl-3 mb-4 text-sm text-gray-700 relative bg-white"><span class="text-2xl text-gray-400 italic leading-none absolute -left-1">“</span>%s<span class="text-2xl text-gray-400 italic leading-none absolute right-0 bottom-0">”</span></blockquote>`,
 			inner,
 		)
 	}
