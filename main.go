@@ -390,6 +390,22 @@ func generateHTML(days []Day, title string) {
         .avatar-right {
             right: -30px;
         }
+        .event-title {
+            position: relative;
+        }
+        .event-title .anchor-link {
+            opacity: 0;
+            margin-left: 0.5rem;
+            color: #9ca3af;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .event-title:hover .anchor-link {
+            opacity: 1;
+        }
+        .event-title .anchor-link:hover {
+            color: #3b82f6;
+        }
         @media (max-width: 800px) {
             .timeline-line {
                 display: none;
@@ -534,9 +550,9 @@ func generateHTML(days []Day, title string) {
 					)
 				}
 				fmt.Printf(`
-                                <div class="font-semibold text-gray-800 mb-2">%s</div>
+                                <div class="font-semibold text-gray-800 mb-2 event-title">%s<a href="#%s" class="anchor-link">#</a></div>
 `,
-					html.EscapeString(event.Title),
+					html.EscapeString(event.Title), event.ID,
 				)
 				for _, line := range event.Content {
 					processed := processContent(line)
@@ -582,9 +598,9 @@ func generateHTML(days []Day, title string) {
 					)
 				}
 				fmt.Printf(`
-                                <div class="font-semibold text-gray-800 mb-2">%s</div>
+                                <div class="font-semibold text-gray-800 mb-2 event-title">%s<a href="#%s" class="anchor-link">#</a></div>
 `,
-					html.EscapeString(event.Title),
+					html.EscapeString(event.Title), event.ID,
 				)
 				for _, line := range event.Content {
 					processed := processContent(line)
