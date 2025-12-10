@@ -245,8 +245,8 @@ func processContent(content string, eventCharacters map[string][]string) string 
 				if chars, ok := eventCharacters[targetID]; ok {
 					for _, char := range chars {
 						avatarHTML += fmt.Sprintf(
-							`<img src="./characters/%s.png" alt="%s" class="mini-avatar">`,
-							html.EscapeString(char), html.EscapeString(char),
+							`<img src="./characters/%s.png" alt="%s" title="%s" class="mini-avatar">`,
+							html.EscapeString(char), html.EscapeString(char), html.EscapeString(char),
 						)
 					}
 				}
@@ -577,8 +577,8 @@ func generateHTML(days []Day, title string) {
 				)
 				for i, char := range event.Characters {
 					fmt.Printf(`
-                                <img src="./characters/%s.png" alt="%s" class="avatar avatar-left" style="top: %dpx;">`,
-						html.EscapeString(char), html.EscapeString(char), -12+(i*38),
+                                <img src="./characters/%s.png" alt="%s" title="%s" class="avatar avatar-left" style="top: %dpx;">`,
+						html.EscapeString(char), html.EscapeString(char), html.EscapeString(char), -12+(i*38),
 					)
 				}
 				fmt.Printf(`
@@ -625,8 +625,8 @@ func generateHTML(days []Day, title string) {
 				)
 				for i, char := range event.Characters {
 					fmt.Printf(`
-                                <img src="./characters/%s.png" alt="%s" class="avatar avatar-right" style="top: %dpx;">`,
-						html.EscapeString(char), html.EscapeString(char), -12+(i*38),
+                                <img src="./characters/%s.png" alt="%s" title="%s" class="avatar avatar-right" style="top: %dpx;">`,
+						html.EscapeString(char), html.EscapeString(char), html.EscapeString(char), -12+(i*38),
 					)
 				}
 				fmt.Printf(`
@@ -654,7 +654,7 @@ func generateHTML(days []Day, title string) {
 
 	fmt.Println(`        </div>
 	<div class="event-card" style="margin: 2em 4em">
-			<img src="./characters/Abogado.png" alt="Abogado" class="avatar avatar-left" style="top: -12px;">
+			<img src="./characters/Abogado.png" alt="Abogado" title="Abogado" class="avatar avatar-left" style="top: -12px;">
 
 			<div class="font-semibold text-gray-800 mb-2">
 				Fuente
